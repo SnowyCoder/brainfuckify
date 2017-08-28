@@ -12,6 +12,8 @@ def encode(text):
     brainfuck = []
     for c in text:
         next_chr = ord(c)
+        if next_chr > 127:
+            continue
         if next_chr is last:
             brainfuck.insert(-1, '.')
         else:
@@ -120,4 +122,4 @@ def mul_to_brainfuck(tup, negative):
 
 
 __build_map()
-#print(encode('test'))
+#print(encode('W JESÙ'))
