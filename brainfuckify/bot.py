@@ -2,11 +2,11 @@ import telegram
 import os
 import logging
 
-from telegram.ext import Updater, CommandHandler
+from telegram.ext import *
 
 URL = 'https://brainfuckify.herokuapp.com/'
-TOKEN = os.environ.get('TOKEN')
-PORT = int(os.environ.get('PORT'))
+TOKEN = os.environ['TOKEN']
+PORT = int(os.environ['PORT'])
 
 logging.basicConfig(format='%(asctime)s - %(name)s - %(levelname)s - %(message)s', level=logging.INFO)
 
@@ -19,8 +19,12 @@ def start(bot, update):
     bot.send_message(chat_id=update.message.chat_id, text="I'm a bot, please talk to me!")
 
 
-dispatcher.add_handler(CommandHandler('start', start))
+def message(bot, update):
+    bot.send_message(chat_id=update.message.chat_id, text=update.message.text)
 
+
+dispatcher.add_handler(CommandHandler('start', start))
+dispatcher.add_handler(MessageHandler(Filters.text, message))
 
 updater.start_webhook(
     listen="0.0.0.0",
@@ -31,4 +35,3 @@ updater.start_webhook(
 updater.bot.set_webhook(URL + TOKEN)
 
 updater.idle()
-
