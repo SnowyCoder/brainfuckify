@@ -1,0 +1,6 @@
+{
+  "name": "Brainfuckify",
+  "description": "A bot for telegram that brainfuckifies your text.",
+  "repository": "https://github.com/heroku/python-getting-started",
+  "keywords": ["python", "telegram"]
+}
