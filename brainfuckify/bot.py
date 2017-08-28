@@ -4,6 +4,7 @@ import logging
 
 from telegram import *
 from telegram.ext import *
+from core import encode
 
 URL = 'https://brainfuckify.herokuapp.com/'
 TOKEN = os.environ['TOKEN']
@@ -17,11 +18,11 @@ dispatcher = updater.dispatcher
 
 
 def start(bot, update):
-    bot.send_message(chat_id=update.message.chat_id, text="I'm a bot, please talk to me!")
+    bot.send_message(chat_id=update.message.chat_id, text="Hello, write anything and I'll brainfuck it")
 
 
 def message(bot, update):
-    bot.send_message(chat_id=update.message.chat_id, text=update.message.text)
+    bot.send_message(chat_id=update.message.chat_id, text=encode(update.message.text))
 
 
 def inline(bot, update):
@@ -32,8 +33,9 @@ def inline(bot, update):
     results.append(
         InlineQueryResultArticle(
             id=query.upper(),
-            title='Caps',
-            input_message_content=InputTextMessageContent(query.upper())
+            title='Brainfuckify',
+            description='Brainfuck encoded text',
+            input_message_content=InputTextMessageContent(encode(query.upper()))
         )
     )
     bot.answer_inline_query(update.inline_query.id, results)
