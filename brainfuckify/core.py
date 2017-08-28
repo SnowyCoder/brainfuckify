@@ -47,29 +47,7 @@ def is_prime(n):
     """Returns True if n is prime."""
     # ASCII are espected to be encoded in one byte. a Lookup table is faster and cheaper
     return n in [2, 3, 5, 7, 11, 13, 17, 19, 23, 29, 31, 37, 41, 43, 47, 53, 59, 61, 67, 71, 73, 79, 83, 89, 97, 101, 103, 107, 109, 113, 127]
-    
-''' 
-    if n == 2:
-        return True
-    if n == 3:
-        return True
-    if n % 2 == 0:
-        return False
-    if n % 3 == 0:
-        return False
 
-    i = 5
-    w = 2
-
-    while i * i <= n:
-        if n % i == 0:
-            return False
-
-        i += w
-        w = 6 - w
-
-    return True
-'''
 
 # Returns all the possible multipliers that have the second value lesser than 10
 def __possible_mults(n):
