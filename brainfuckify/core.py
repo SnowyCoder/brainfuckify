@@ -24,7 +24,7 @@ def __encode(text):
         else:
             brainfuck += encode_chr(next_chr - last) + '.<'
         if len(brainfuck) >= LIMIT:
-            return str(brainfuck[:LIMIT])
+            return ''.join(brainfuck)[:LIMIT]
         last = next_chr
     if len(brainfuck) > 0:
         brainfuck.pop(-1)
