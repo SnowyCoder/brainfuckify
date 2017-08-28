@@ -45,6 +45,14 @@ dispatcher.add_handler(CommandHandler('start', start))
 dispatcher.add_handler(MessageHandler(Filters.text, message))
 dispatcher.add_handler(InlineQueryHandler(inline))
 
+
+def on_error(bot, update, error):
+    logging.exception("Telegram error")
+
+
+dispatcher.add_error_handler(callback=on_error)
+
+
 updater.start_webhook(
     listen="0.0.0.0",
     port=PORT,
