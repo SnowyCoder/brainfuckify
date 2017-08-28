@@ -1,6 +1,7 @@
 import prime_math
 
 decompose_map = {}
+LIMIT = 4096
 
 
 def encode_chr(i):
@@ -8,6 +9,10 @@ def encode_chr(i):
 
 
 def encode(text):
+    return __encode(text).replace('<>', '')
+
+
+def __encode(text):
     last = 0
     brainfuck = []
     for c in text:
@@ -18,10 +23,12 @@ def encode(text):
             brainfuck.insert(-1, '.')
         else:
             brainfuck += encode_chr(next_chr - last) + '.<'
+        if len(brainfuck) >= LIMIT:
+            return str(brainfuck[:LIMIT])
         last = next_chr
     if len(brainfuck) > 0:
         brainfuck.pop(-1)
-    return ''.join(brainfuck).replace('<>', '')
+    return ''.join(brainfuck)
 
 
 def largest_divisor(n):
