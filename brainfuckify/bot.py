@@ -32,10 +32,10 @@ def inline(bot, update):
     results = list()
     results.append(
         InlineQueryResultArticle(
-            id=query.upper(),
+            id='brainfuck',
             title='Brainfuckify',
             description='Brainfuck encoded text',
-            input_message_content=InputTextMessageContent(encode(query.upper()))
+            input_message_content=InputTextMessageContent(encode(query))
         )
     )
     bot.answer_inline_query(update.inline_query.id, results)
