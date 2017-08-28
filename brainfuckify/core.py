@@ -17,6 +17,8 @@ def encode(text):
         else:
             brainfuck += encode_chr(next_chr - last) + '.<'
         last = next_chr
+    if len(brainfuck) > 0:
+        brainfuck.pop(-1)
     return ''.join(brainfuck).replace('<>', '')
 
 
@@ -118,3 +120,4 @@ def mul_to_brainfuck(tup, negative):
 
 
 __build_map()
+#print(encode('test'))
