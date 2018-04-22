@@ -20,6 +20,10 @@ def start(bot, update):
     bot.send_message(chat_id=update.message.chat_id, text="Hello, write anything and I'll brainfuck it")
 
 
+def author(bot, update):
+    bot.send_message(chat_id=update.message.chat_id, text="author: @SnowyCoder")
+
+
 def message(bot, update):
     bot.send_message(chat_id=update.message.chat_id, text=encode(update.message.text))
 
@@ -41,6 +45,7 @@ def inline(bot, update):
 
 
 dispatcher.add_handler(CommandHandler('start', start))
+dispatcher.add_handler(CommandHandler('author', author))
 dispatcher.add_handler(MessageHandler(Filters.text, message))
 dispatcher.add_handler(InlineQueryHandler(inline))
 
@@ -51,13 +56,13 @@ def on_error(bot, update, error):
 
 dispatcher.add_error_handler(callback=on_error)
 
+if __name__ == '__main__':
+    updater.start_webhook(
+        listen="0.0.0.0",
+        port=PORT,
+        url_path=TOKEN
+    )
 
-updater.start_webhook(
-    listen="0.0.0.0",
-    port=PORT,
-    url_path=TOKEN
-)
+    updater.bot.set_webhook(URL + TOKEN)
 
-updater.bot.set_webhook(URL + TOKEN)
-
-updater.idle()
+    updater.idle()
