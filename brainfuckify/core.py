@@ -8,13 +8,13 @@ def encode_chr(i):
 
 def encode(text):
     computed = __encode(text)
-    return ''.join(computed[1:])  # Remove first '<'
+    return ''.join(computed).replace('><', '')  # Remove '><'
 
 
 def __encode(text):
     # 2 channels used: index and chars
     last = 0
-    brainfuck = []
+    brainfuck = ['>']
     for c in text:
         next_chr = ord(c)
         if next_chr > 127:
@@ -60,7 +60,7 @@ def __possible_mults(n):
     return res
 
 
-def __decompose2(i, find_alt=True):
+def __decompose(i, find_alt=True):
     # There are tree forms:
     # 0 -> n                        Length: n
     # 1 -> <a[>b<-]> (a*b=n)        Length: 7 + a + b
@@ -90,8 +90,8 @@ def __decompose2(i, find_alt=True):
     for x in range(i - 5, i + 6):
         if x == i:
             continue
-        alt_a, alt_b, _ = __decompose2(x, False)
-        c = x - i
+        alt_a, alt_b, _ = __decompose(x, False)
+        c = i - x
 
         if alt_a + alt_b + abs(c) + 7 < best_a + best_b + abs(best_c) + offset:
             # If the alternative is found then swap it with the
@@ -105,7 +105,8 @@ def __decompose2(i, find_alt=True):
 def __build_map():
     decompose_map[0] = ''
     for i in range(1, 255):
-        res = __decompose2(i)
+        res = __decompose(i)
+        assert res[0] * res[1] + res[2] == i
         decompose_map[i] = mul_to_brainfuck(res, False)
         decompose_map[-i] = mul_to_brainfuck(res, True)
 
@@ -122,3 +123,5 @@ def mul_to_brainfuck(tup, negative):
 
 
 __build_map()
+print(decompose_map)
+print(encode('Hello world'))
