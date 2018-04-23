@@ -114,14 +114,18 @@ def __build_map():
 # Transforms the a*b+c form into a[>b<-]>c< brainfuck code, negating it if possible
 def mul_to_brainfuck(tup, negative):
     a, b, off = tup
-    ch = '-' if negative else '+'
+    bch = '-' if negative else '+'
+    if negative:
+        off = -off
     if a is 1 or b is 1:
-        return ch * (a * b + off)
+        return bch * (a * b + off)
 
-    res = '<' + ('+' * a) + '[>' + (ch * b) + '<-]>' + (ch * off)
+    offch = '-' if off < 0 else '+'
+    res = '<' + ('+' * a) + '[>' + (bch * b) + '<-]>' + (offch * abs(off))
+    #print("{} = ({} * {} + {}) -> {}".format((a * b * (-1 if negative else 1) + off), a, -b if negative else b, off, res))
     return res
 
 
 __build_map()
 print(decompose_map)
-print(encode('Hello world'))
+print(encode('Hello world!'))
