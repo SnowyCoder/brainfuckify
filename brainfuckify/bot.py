@@ -6,6 +6,7 @@ from telegram.ext import *
 from core import encode
 
 URL = 'https://brainfuckify.herokuapp.com/'
+SRC_URL = 'https://github.com/SnowyCoder/brainfuckify'
 TOKEN = os.environ['TOKEN']
 PORT = int(os.environ['PORT'])
 
@@ -22,6 +23,10 @@ def start(bot, update):
 
 def author(bot, update):
     bot.send_message(chat_id=update.message.chat_id, text="author: @SnowyCoder")
+
+
+def source(bot, update):
+    bot.send_message(char_id=update.message.chat_id, text="You can find the source here:\n" + SRC_URL)
 
 
 def message(bot, update):
@@ -46,6 +51,7 @@ def inline(bot, update):
 
 dispatcher.add_handler(CommandHandler('start', start))
 dispatcher.add_handler(CommandHandler('author', author))
+dispatcher.add_handler(CommandHandler('source', source))
 dispatcher.add_handler(MessageHandler(Filters.text, message))
 dispatcher.add_handler(InlineQueryHandler(inline))
 
