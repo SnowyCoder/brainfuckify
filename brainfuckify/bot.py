@@ -1,9 +1,13 @@
 import os
 import logging
+import string
 
 from telegram import *
 from telegram.ext import *
+from telegram.utils.helpers import escape_markdown
+
 from core import encode
+from simulate import simulate
 
 URL = 'https://brainfuckify.herokuapp.com/'
 SRC_URL = 'https://github.com/SnowyCoder/brainfuckify'
@@ -46,6 +50,20 @@ def inline(bot, update):
             input_message_content=InputTextMessageContent(encode(query))
         )
     )
+    translate_success, translation, translate_iter = simulate(query)
+
+    translation = ''.join(map(lambda x: '�' if x not in string.printable else x, translation))
+
+    translation = 'Result: ' + translation
+    results.append(
+        InlineQueryResultArticle(
+            id='translated',
+            title='Decode',
+            description='Brainfuck decoded text',
+            input_message_content=InputTextMessageContent(escape_markdown(translation))
+        )
+    )
+
     bot.answer_inline_query(update.inline_query.id, results)
 
 
