@@ -30,7 +30,7 @@ def author(bot, update):
 
 
 def source(bot, update):
-    bot.send_message(char_id=update.message.chat_id, text="You can find the source here:\n" + SRC_URL)
+    bot.send_message(chat_id=update.message.chat_id, text="You can find the source here:\n" + SRC_URL)
 
 
 def message(bot, update):
