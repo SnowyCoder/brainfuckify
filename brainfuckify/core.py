@@ -8,8 +8,52 @@ def encode_chr(i):
 
 def encode(text):
     computed = __encode(text)
-    return ''.join(computed).replace('><', '')  # Remove '><'
+    computed = ''.join(computed).replace('><', '')  # Remove '><'
+    computed_m = __encode_M(text)
+    #print(len(computed))
+    #print(len(computed_m))
+    return computed if len(computed)<len(computed_m) else computed_m # return best of two algorithms
 
+def __encode_M_bitset(text,last,v): # try M encoding using bits in v
+	res = ">+"
+	for j in range(0,len(v)): # for every bit
+		if j!=0: # if not first bit, move the new power of to from position 0 to position 1
+			res+="<[->+<]>"
+		res+="[-" # iterate with position 1 (power of 2 corresponding to v[j]th bit)
+		if j!=len(v)-1: # if not last bit, generate next power of two in position 0
+			res+="<"
+			res+="+"*(1<<(v[j+1]-v[j]))
+			res+=">"
+		l=0 # calculate last character in text you have to go to
+		for i in range(v[j],8 if j==len(v)-1 else v[j+1]):
+			l=max(l,last[i])
+		for i in range (0,l+1): # for every character <=l, add the correct powers of two
+			res+=">"
+			for k in range(v[j],8 if j==len(v)-1 else v[j+1]):
+				if ord(text[i])&(1<<k)!=0:
+					res+="+"*(1<<(k-v[j]))
+		res+="<"*(l+1) # go back to the beginning
+		res+="]" # and loop
+	res+=">[.>]" # print result
+	return res
+
+def __encode_M(text):
+	res=""
+	tmp=""
+	last = [-1,-1,-1,-1,-1,-1,-1,-1]
+	for i in range(0,len(text)):
+		for j in range(0,8): # calculate last character in text that needs the jth bit
+			if ord(text[i])&(1<<j) != 0:
+				last[j]=i
+	for bs in range(1,128,2): # for every possible bitset
+		v=[]
+		for j in range(0,8): # convert the bitset into a vector
+			if bs&(1<<j)!=0:
+				v.append(j)
+		tmp=__encode_M_bitset(text,last,v) # try encoding
+		if res=="" or len(res)>len(tmp):   # and keep if it is better
+			res=tmp
+	return res
 
 def __encode(text):
     # 2 channels used: index and chars
@@ -125,7 +169,7 @@ def mul_to_brainfuck(tup, negative):
     #print("{} = ({} * {} + {}) -> {}".format((a * b * (-1 if negative else 1) + off), a, -b if negative else b, off, res))
     return res
 
-
 __build_map()
 print(decompose_map)
 print(encode('Hello world!'))
+#print(encode('this string is very long, so probabilly encoded_m algorithm is better'))
